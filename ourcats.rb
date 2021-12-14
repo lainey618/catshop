@@ -1,54 +1,33 @@
+public
 class CatList
     attr_accessor :head
 
     def initialize
-        self.head = CatNode.new
+        @front = CatNode.new
     end
 
     def add(catinfo)
 
-        if (self.head.catinfo != nil)
-            if catinfo < self.head.catinfo
+        if (@front.catinfo != nil)
+            if catinfo < @front.catinfo
                 temp_cat = CatNode.new
                 temp_cat.add catinfo
-                temp_cat.nextNode = self.head
-                self.head = temp_cat
+                temp_cat.nextNode = @front
+                @front = temp_cat
             else
-                self.head.add catinfo
+                @front.add catinfo
             end
         else 
-            self.head.add catinfo
-        end
-        #take in a catinfo from the user (aka us)
-        #loop through the list and compare that catinfo to stored catinfos
-        #find where in the list the new catinfo belongs
-        #store that new catinfo in the list in the correct spot
-            #move the ones after +1 in the index
-
-        if(self.head.nil?)
-            self.head = CatNode.new(catinfo, nil)
-        else
-            lastNode = self.head
-            while(!lastNode.nextNode.nil?)
-                lastNode = lastNode.nextNode
-            end
-            lastNode.nextNode = CatNode.new(catinfo, nil)
+            @front.add catinfo
         end
     end
 
-    def find(catinfo)                             #part of coding test
-        node = self.head
-        while(!node.nil?)
-            if(node.catinfo == catinfo)
-                return node
-            end
-            node = node.nextNode
-        end
-        false 
+    def find(index)                             #part of coding test
+        return @front.getTheDamnCat index
     end
 
     def catTail
-        node = self.head
+        node = @front
 
         return node if !node.nextNode
         return node if !node.nextNode while (node = node.nextNode)
@@ -64,34 +43,31 @@ class CatList
         node.nextNode.nextNode = old_next
     end
 
+    
     def getTheDamnCat(index)         #part of coding test, good for testing, not great for speed
-        return self.head.getTheDamnCat(index)
+        return @front.getTheDamnCat(index)
     end
+end
 
-    private 
+    public
     class CatNode
         attr_accessor :catinfo, :nextNode
 
-        # def initialize(catinfo, nextNode)
-        #     self.catinfo = nil
-        #     self.nextNode = nil
-        # end
-
-        def add data
+        def add catinfo
             if @catinfo == nil
-                @catinfo == catinfo
+                @catinfo = catinfo
             else
-                if @next == nil
-                    @next = CatNode.new
-                    @next.add catinfo
+                if @nextNode == nil
+                    @nextNode = CatNode.new
+                    @nextNode.add catinfo
                 else
-                    if @next.catinfo > catinfo
+                    if @nextNode.catinfo > catinfo
                         temp_cat = CatNode.new
                         temp_cat.add catinfo
-                        temp_cat.nextNode = @next
-                        @next = temp_cat
+                        temp_cat.nextNode = @nextNode
+                        @nextNode = temp_cat
                     else
-                        @next.add catinfo
+                        @nextNode.add catinfo
                     end
                 end
             end
@@ -100,30 +76,30 @@ class CatList
         def getTheDamnCat(index)
         
             if (index == 0)
-                return catinfo
+                return @catinfo
             else
-                if @next == nil
-                    return nil
+                if @nextNode == nil
+                    return "hello"
                 end
-                return self.nextNode.getTheDamnCat(index - 1)
+                return @nextNode.getTheDamnCat(index - 1)
             end
         end
     end
-end
 
 catshop = CatList.new
-catshop.add("Persian")
+
 catshop.add("Savannah")
 catshop.add("Russian Blue")
+catshop.add("Persian")
 catshop.add("Bobtail")
 catshop.add("Lynx")
 
 #catshop.addAfter("Persian", "Tabby")            #adds a cat after persian
-puts catshop.getTheDamnCat(2)                 #find the cat at this position
+#puts catshop.getTheDamnCat(2)                 #find the cat at this position
 
-(0..3).each do |i|                              #prints out all of the cats
-    puts catshop.getTheDamnCat(i)
-end
+ (0..4).each do |i|                              #prints out all of the cats
+     puts catshop.getTheDamnCat(i)
+ end
 
 #A BUNCH OF TESTS BELOW HERE
 
