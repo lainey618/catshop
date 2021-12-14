@@ -15,27 +15,19 @@ class CatList
         #store that new value in the list in the correct spot
             #move the ones after +1 in the index
 
-        chars = value
-
         if(self.head.nil?)
             self.head = CatNode.new(value, nil)
         else
             lastNode = self.head
             while(!lastNode.nextNode.nil?)
                 lastNode = lastNode.nextNode
-                nodevalue = lastNode.value
-                nodevalue.each_char do |v|
-                    nodeAskii = v.ord
+                nodeAskii = lastNode.value[1].ord
+                valueAskii = value[1].ord
 
-                    chars.each_char do |c|
-                        valueAskii = c.ord
-
-                        if (valueAskii > nodeAskii)
-                            lastNode.nextNode = CatNode.new(value, nil)
-                        elsif (valueAskii < nodeAskii)
-                            lastNode.nextNode = CatNode.new(value, lastNode)
-                        end
-                    end
+                if (valueAskii > nodeAskii)
+                    lastNode.nextNode = CatNode.new(value, nil)
+                elsif (valueAskii < nodeAskii)
+                    lastNode.nextNode = CatNode.new(value, lastNode)
                 end
             end
             lastNode.nextNode = CatNode.new(value, nil)
