@@ -2,42 +2,44 @@ class CatList
     attr_accessor :head
 
     def initialize
-        self.head = nil
+        self.head = CatNode.new
     end
 
-    def add(value)
+    def add(catinfo)
 
-        #take in a value from the user (aka us)
-            ### DONE (aka our)
-        #loop through the list and compare that value to stored values
-            ### Start from the first one
-        #find where in the list the new value belongs
-        #store that new value in the list in the correct spot
+        if (self.head.catinfo != nil)
+            if catinfo < self.head.catinfo
+                temp_cat = CatNode.new
+                temp_cat.add catinfo
+                temp_cat.nextNode = self.head
+                self.head = temp_cat
+            else
+                self.head.add catinfo
+            end
+        else 
+            self.head.add catinfo
+        end
+        #take in a catinfo from the user (aka us)
+        #loop through the list and compare that catinfo to stored catinfos
+        #find where in the list the new catinfo belongs
+        #store that new catinfo in the list in the correct spot
             #move the ones after +1 in the index
 
         if(self.head.nil?)
-            self.head = CatNode.new(value, nil)
+            self.head = CatNode.new(catinfo, nil)
         else
             lastNode = self.head
             while(!lastNode.nextNode.nil?)
                 lastNode = lastNode.nextNode
-                nodeAskii = lastNode.value[1].ord
-                valueAskii = value[1].ord
-
-                if (valueAskii > nodeAskii)
-                    lastNode.nextNode = CatNode.new(value, nil)
-                elsif (valueAskii < nodeAskii)
-                    lastNode.nextNode = CatNode.new(value, lastNode)
-                end
             end
-            lastNode.nextNode = CatNode.new(value, nil)
+            lastNode.nextNode = CatNode.new(catinfo, nil)
         end
     end
 
-    def find(value)                             #part of coding test
+    def find(catinfo)                             #part of coding test
         node = self.head
         while(!node.nil?)
-            if(node.value == value)
+            if(node.catinfo == catinfo)
                 return node
             end
             node = node.nextNode
@@ -52,13 +54,13 @@ class CatList
         return node if !node.nextNode while (node = node.nextNode)
     end
 
-    def addAfter(target, value)
+    def addAfter(target, catinfo)
         node = find(target)
 
         return unless node
 
         old_next = node.nextNode
-        node.nextNode = CatNode.new(value, nil)
+        node.nextNode = CatNode.new(catinfo, nil)
         node.nextNode.nextNode = old_next
     end
 
@@ -68,18 +70,41 @@ class CatList
 
     private 
     class CatNode
-        attr_accessor :value, :nextNode
+        attr_accessor :catinfo, :nextNode
 
-        def initialize(value, nextNode)
-            self.value = value
-            self.nextNode = nextNode
+        # def initialize(catinfo, nextNode)
+        #     self.catinfo = nil
+        #     self.nextNode = nil
+        # end
+
+        def add data
+            if @catinfo == nil
+                @catinfo == catinfo
+            else
+                if @next == nil
+                    @next = CatNode.new
+                    @next.add catinfo
+                else
+                    if @next.catinfo > catinfo
+                        temp_cat = CatNode.new
+                        temp_cat.add catinfo
+                        temp_cat.nextNode = @next
+                        @next = temp_cat
+                    else
+                        @next.add catinfo
+                    end
+                end
+            end
         end
 
         def getTheDamnCat(index)
         
             if (index == 0)
-                return value
+                return catinfo
             else
+                if @next == nil
+                    return nil
+                end
                 return self.nextNode.getTheDamnCat(index - 1)
             end
         end
@@ -90,8 +115,10 @@ catshop = CatList.new
 catshop.add("Persian")
 catshop.add("Savannah")
 catshop.add("Russian Blue")
+catshop.add("Bobtail")
+catshop.add("Lynx")
 
-catshop.addAfter("Persian", "Tabby")            #adds a cat after persian
+#catshop.addAfter("Persian", "Tabby")            #adds a cat after persian
 puts catshop.getTheDamnCat(2)                 #find the cat at this position
 
 (0..3).each do |i|                              #prints out all of the cats
@@ -100,11 +127,11 @@ end
 
 #A BUNCH OF TESTS BELOW HERE
 
-# puts catshop.head.value
-# puts catshop.head.nextNode.value
+# puts catshop.head.catinfo
+# puts catshop.head.nextNode.catinfo
 # puts catshop.find("Persian")
 # puts catshop.find("persian")
 # puts catshop.find("Tabby")
 # puts catshop.find("Russian Blue")
-# puts catshop.catTail.value
-# puts catshop.find("Tabby").value
+# puts catshop.catTail.catinfo
+# puts catshop.find("Tabby").catinfo
