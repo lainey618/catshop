@@ -6,12 +6,37 @@ class CatList
     end
 
     def add(value)
+
+        #take in a value from the user (aka us)
+            ### DONE (aka our)
+        #loop through the list and compare that value to stored values
+            ### Start from the first one
+        #find where in the list the new value belongs
+        #store that new value in the list in the correct spot
+            #move the ones after +1 in the index
+
+        chars = value
+
         if(self.head.nil?)
             self.head = CatNode.new(value, nil)
         else
             lastNode = self.head
             while(!lastNode.nextNode.nil?)
                 lastNode = lastNode.nextNode
+                nodevalue = lastNode.value
+                nodevalue.each_char do |v|
+                    nodeAskii = v.ord
+
+                    chars.each_char do |c|
+                        valueAskii = c.ord
+
+                        if (valueAskii > nodeAskii)
+                            lastNode.nextNode = CatNode.new(value, nil)
+                        elsif (valueAskii < nodeAskii)
+                            lastNode.nextNode = CatNode.new(value, lastNode)
+                        end
+                    end
+                end
             end
             lastNode.nextNode = CatNode.new(value, nil)
         end
@@ -73,6 +98,16 @@ catshop = CatList.new
 catshop.add("Persian")
 catshop.add("Savannah")
 catshop.add("Russian Blue")
+
+catshop.addAfter("Persian", "Tabby")            #adds a cat after persian
+puts catshop.getTheDamnCat(2)                 #find the cat at this position
+
+(0..3).each do |i|                              #prints out all of the cats
+    puts catshop.getTheDamnCat(i)
+end
+
+#A BUNCH OF TESTS BELOW HERE
+
 # puts catshop.head.value
 # puts catshop.head.nextNode.value
 # puts catshop.find("Persian")
@@ -81,9 +116,3 @@ catshop.add("Russian Blue")
 # puts catshop.find("Russian Blue")
 # puts catshop.catTail.value
 # puts catshop.find("Tabby").value
-catshop.addAfter("Persian", "Tabby")            #adds a cat after persian
-puts catshop.getTheDamnCat(2)                 #find the cat at this position
-
-(0..3).each do |i|                              #prints out all of the cats
-    puts catshop.getTheDamnCat(i)
-end
